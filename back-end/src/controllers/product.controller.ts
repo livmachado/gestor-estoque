@@ -18,6 +18,7 @@ export const ProductController = {
 
   detail: async (req: Request, res: Response) => {
     const id = Number(req.params.id);
+    console.log("Buscando produto com ID:", id); 
     const product = await ProductService.findById(id);
     if (!product) return res.status(404).json({ error: 'Produto não encontrado' });
     res.json(product);
