@@ -1,10 +1,11 @@
-import { SideBar } from "./components/Sidebar"
+import ProductsPage from "./pages/ProductsPage"
 
 function App() {
 
   return (
     <div>
-      <SideBar />
+      <ProductsPage/>
+
     </div>
   )
 }
