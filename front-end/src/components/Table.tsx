@@ -12,7 +12,7 @@ export function Table() {
                 </tr>
             </thead>
             <tbody>
-                <tr className="py-4 border-b border-gray-200">
+                <tr className="py-4 border-b border-gray-200 cursor-pointer">
                     <td className="p-3 text-center text-sm text-gray-500 font-normal">
                         <a href="">1</a>
                     </td>
