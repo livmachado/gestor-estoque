@@ -8,25 +8,30 @@ import { MdMenuOpen } from "react-icons/md";
 import { FiPackage } from "react-icons/fi";
 import { GrTransaction } from "react-icons/gr";
 import { TbReportAnalytics } from "react-icons/tb";
+import { Link } from "react-router-dom";
 
 
 type MenuItem= {
     label: string;
     icon: IconType;
+    path: string;
 };
 
 const menuItems: MenuItem[]= [
     { 
         label: "Produtos", 
-        icon: FiPackage
+        icon: FiPackage,
+        path: "/produtos"       
     },
     { 
         label: "Transições", 
-        icon: GrTransaction
+        icon: GrTransaction,
+        path: "/transicoes"
     },
     { 
         label: "Relatôrio", 
-        icon: TbReportAnalytics
+        icon: TbReportAnalytics,
+        path: ""
     },
 ]
 
@@ -34,7 +39,7 @@ const menuItems: MenuItem[]= [
 
 export function SideBar() {
     
-    const [open, setOpen]= useState(true)
+    const [open, setOpen]= useState(false)
 
     return(
         <nav className={`shadow-md h-screen bg-blue-600 ${open ? 'w-50' : 'w-16'}`} >
@@ -46,8 +51,10 @@ export function SideBar() {
                     menuItems.map((item, index)=> {
                         return (
                             <li key={index} className="flex px-3 py-2 my-2 hover:bg-blue-300 rounded-md cursor-pointer gap-2 items-center relative group">
-                                <item.icon size={30} className="text-blue-400 group-hover:text-blue-600 cursor-pointer "/>
-                                <span className={`${!open && 'w-0 translate-x-24'} overflow-hidden font-inter text-blue-400 text-xl group-hover:text-blue-600`}>{item.label}</span>
+                                <Link className="flex" to={item.path}>
+                                    <item.icon size={30} className="text-blue-400 group-hover:text-blue-600 cursor-pointer "/>
+                                    <span className={`${!open && 'w-0 translate-x-24'} overflow-hidden font-inter text-blue-400 text-xl group-hover:text-blue-600`}>{item.label}</span>
+                                </Link>
                             </li>
                         )
                     })

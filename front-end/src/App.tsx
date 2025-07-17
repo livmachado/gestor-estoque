@@ -13,7 +13,7 @@ function App() {
       <SideBar />
       <main className="bg-blue-50 p-10 w-full">
         <Routes>
-          <Route path="/produtos" element={<ProductsPage />} />
+          <Route path="/" element={<ProductsPage />} />
           <Route path="/transicoes" element={<TransactionsPage />} />
         </Routes>
       </main>

@@ -1,5 +1,4 @@
-import { SideBar } from "../components/SideBar"
-import { Table } from "../components/Table"
+import ProductsTable from "../components/ProductsTable";
 import ModalForm from "../components/ModalForm";
 
 //icons
@@ -7,14 +6,21 @@ import { CiHome } from "react-icons/ci";
 import { PiGreaterThanLight } from "react-icons/pi";
 import { useState } from "react";
 
-
+const productData= [
+    {
+        id: 1, 
+        name: "Mate Caseiro",
+        quantity: 10,
+        date: "20/01/2015",
+        price: "10.00",
+        action: "Ação",
+    }
+]
 
 export default function ProductsPage() {
     const [isModalFormOpen, setIsModalFormOpen] = useState<boolean>(false)
     return(
-        <div className="flex">
-            <SideBar />
-            <main className="bg-blue-50 p-10 w-full">
+            <div>
                 <div className="flex justify-between gap-2.5">
                     <div className="flex items-center justify-start gap-2.5">
                         <CiHome size={20} className=" text-gray-500" />
@@ -27,9 +33,8 @@ export default function ProductsPage() {
                     </button>
                 </div>
                 <hr className="my-4 border-t border-gray-300" />
-                <Table />
+                <ProductsTable products={productData} />
                 <ModalForm isOpen={isModalFormOpen} onClose={()=> setIsModalFormOpen(false)}/>
-            </main>
-        </div>
+            </div>
     )
 }
