@@ -21,7 +21,7 @@ const menuItems: MenuItem[]= [
     { 
         label: "Produtos", 
         icon: FiPackage,
-        path: "/produtos"       
+        path: "/"       
     },
     { 
         label: "Transições", 
