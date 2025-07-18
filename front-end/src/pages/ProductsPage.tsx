@@ -1,5 +1,5 @@
 import ProductsTable from "../components/ProductsTable";
-import ModalForm from "../components/ModalForm";
+import ModalProduct from "../components/ModalProduct";
 
 //icons
 import { CiHome } from "react-icons/ci";
@@ -18,7 +18,7 @@ const productData= [
 ]
 
 export default function ProductsPage() {
-    const [isModalFormOpen, setIsModalFormOpen] = useState<boolean>(false)
+    const [isModalProductOpen, setIsModalProductOpen] = useState<boolean>(false)
     return(
             <div>
                 <div className="flex justify-between gap-2.5">
@@ -28,13 +28,13 @@ export default function ProductsPage() {
                         <span className=" text-gray-500 text-base font-medium ">Produtos</span>
                         <PiGreaterThanLight size={16} className="text-gray-500"/>
                     </div>
-                    <button onClick={() => setIsModalFormOpen(!isModalFormOpen)} className="cursor-pointer flex justify-end items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition duration-200">
+                    <button onClick={() => setIsModalProductOpen(!isModalProductOpen)} className="cursor-pointer flex justify-end items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md shadow-sm transition duration-200">
                         + Criar Produto 
                     </button>
                 </div>
                 <hr className="my-4 border-t border-gray-300" />
                 <ProductsTable products={productData} />
-                <ModalForm isOpen={isModalFormOpen} onClose={()=> setIsModalFormOpen(false)}/>
+                <ModalProduct isOpen={isModalProductOpen} onClose={()=> setIsModalProductOpen(false)}/>
             </div>
     )
 }

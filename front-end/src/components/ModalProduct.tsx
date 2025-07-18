@@ -5,7 +5,7 @@ interface modalType {
   onClose: () => void;
 }
 
-export default function ModalForm({ isOpen, onClose }: modalType) {
+export default function ModalProduct({ isOpen, onClose }: modalType) {
   if (isOpen) {
     return (
       <div className="fixed inset-0 p-10 left-0 rounded-2xl flex items-center justify-center z-50">
