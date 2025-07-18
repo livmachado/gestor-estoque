@@ -14,7 +14,7 @@ function App() {
       <main className="bg-blue-50 p-10 w-full">
         <Routes>
           <Route path="/" element={<ProductsPage />} />
-          <Route path="/transicoes" element={<TransactionsPage />} />
+          <Route path="/transacoes" element={<TransactionsPage />} />
         </Routes>
       </main>
     </div>

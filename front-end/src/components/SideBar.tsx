@@ -24,9 +24,9 @@ const menuItems: MenuItem[]= [
         path: "/"       
     },
     { 
-        label: "Transições", 
+        label: "Transações", 
         icon: GrTransaction,
-        path: "/transicoes"
+        path: "/transacoes"
     },
     { 
         label: "Relatôrio", 
