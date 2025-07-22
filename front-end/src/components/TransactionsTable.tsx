@@ -26,7 +26,7 @@ export default function TransactionTable({ transactions }: Props) {
       <thead className="border-b-3 border-r-2 border-blue-200 bg-blue-600 text-blue-300 ">
         <tr>
           {columns.map((col) => (
-            <th key={col.accessor} className="p-3 text-center">
+            <th key={col.accessor} className="p-3 text-start">
               {col.header}
             </th>
           ))}
@@ -45,20 +45,20 @@ export default function TransactionTable({ transactions }: Props) {
           return (
             <tr key={transaction.id} className="border-b border-gray-200 odd:bg-white even:bg-blue-200">
               <td
-                className={`p-3 text-start text-sm font-medium ${color} flex items-center justify-center gap-1`}
+                className={`p-3 text-sm font-medium ${color} flex items-center justify-center gap-1`}
               >
                 {icon}
               </td>
-              <td className="p-3 text-sm text-gray-500 text-center cursor-pointer">
+              <td className="p-3 text-sm text-gray-500 cursor-pointer">
                 {transaction.productId}
               </td>
-              <td className={`p-3 text-center text-sm font-medium ${color}`}>
+              <td className={`p-3 text-sm font-medium ${color}`}>
                 {transaction.product}
               </td>
-              <td className="p-3 text-center text-sm text-gray-400">
+              <td className="p-3 text-sm text-gray-400">
                 {transaction.date}
               </td>
-              <td className={`p-3 text-end text-sm font-semibold ${color}`}>
+              <td className={`p-3 text-sm font-semibold ${color}`}>
                 {transaction.quantity}
               </td>
             </tr>

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 
 //tipagem dos icones
 import type { IconType } from "react-icons";
@@ -10,56 +10,68 @@ import { GrTransaction } from "react-icons/gr";
 import { TbReportAnalytics } from "react-icons/tb";
 import { Link } from "react-router-dom";
 
-
-type MenuItem= {
-    label: string;
-    icon: IconType;
-    path: string;
+type MenuItem = {
+  label: string;
+  icon: IconType;
+  path: string;
 };
 
-const menuItems: MenuItem[]= [
-    { 
-        label: "Produtos", 
-        icon: FiPackage,
-        path: "/"       
-    },
-    { 
-        label: "Transações", 
-        icon: GrTransaction,
-        path: "/transacoes"
-    },
-    { 
-        label: "Relatôrio", 
-        icon: TbReportAnalytics,
-        path: ""
-    },
-]
-
-
+const menuItems: MenuItem[] = [
+  {
+    label: "Estoque",
+    icon: FiPackage,
+    path: "/",
+  },
+  {
+    label: "Transações",
+    icon: GrTransaction,
+    path: "/transacoes",
+  },
+  {
+    label: "Relatôrio",
+    icon: TbReportAnalytics,
+    path: "",
+  },
+];
 
 export function SideBar() {
-    
-    const [open, setOpen]= useState(false)
+  const [open, setOpen] = useState(false);
 
-    return(
-        <nav className={`shadow-md h-screen bg-blue-600 ${open ? 'w-50' : 'w-16'}`} >
-            <div className='lg:flex-1 px-3 py-2 h-20 flex items-center justify-end'>
-                <MdMenuOpen  size={34} className={`text-blue-300 cursor-pointer duration-500 ${!open && 'rotate-180'} `} onClick={()=> setOpen(!open)}/>
-            </div>
-            <ul className="flex flex-col mt-40"> 
-                {
-                    menuItems.map((item, index)=> {
-                        return (
-                            <li key={index} className="flex px-3 py-2 my-2 hover:bg-blue-300 rounded-md cursor-pointer gap-2 items-center relative group">
-                                <Link className="flex" to={item.path}>
-                                    <item.icon size={30} className="text-blue-400 group-hover:text-blue-600 cursor-pointer "/>
-                                    <span className={`${!open && 'w-0 translate-x-24'} overflow-hidden font-inter text-blue-400 text-xl group-hover:text-blue-600`}>{item.label}</span>
-                                </Link>
-                            </li>
-                        )
-                    })
-                }
-            </ul>
-        </nav>
-   )
-};
+  return (
+    <nav className={`shadow-md h-screen bg-blue-600 ${open ? "w-50" : "w-16"}`}>
+      <div className="lg:flex-1 px-3 py-2 h-20 flex items-center justify-end">
+        <MdMenuOpen
+          size={34}
+          className={`text-blue-300 cursor-pointer duration-500 ${
+            !open && "rotate-180"
+          } `}
+          onClick={() => setOpen(!open)}
+        />
+      </div>
+      <ul className="flex flex-col mt-40">
+        {menuItems.map((item, index) => {
+          return (
+            <li
+              key={index}
+              className="flex px-3 py-2 my-2 hover:bg-blue-300 rounded-md cursor-pointer gap-2 items-center relative group"
+            >
+              <Link className="flex" to={item.path}>
+                <item.icon
+                  size={30}
+                  className="text-blue-400 group-hover:text-blue-600 cursor-pointer "
+                />
+                <span
+                  className={`${
+                    !open && "w-0 translate-x-24"
+                  } overflow-hidden font-inter text-blue-400 text-xl group-hover:text-blue-600`}
+                >
+                  {item.label}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
