@@ -28,6 +28,7 @@ export default function ProductsPage() {
           children="+ Criar Produto"
         />
       </div>
+      <hr className="my-4 border-t border-gray-300" />
       <ProductsTable products={productData} />
       <ModalProduct
         isOpen={isModalProductOpen}

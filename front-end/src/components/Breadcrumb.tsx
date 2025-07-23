@@ -13,7 +13,6 @@ export default function Breadcrumb({ value }: BreadCrumbProps) {
       <PiGreaterThanLight size={16} className="text-gray-500" />
       <span className=" text-gray-500 text-base font-medium ">{value}</span>
       <PiGreaterThanLight size={16} className="text-gray-500" />
-      <hr className="my-4 border-t border-gray-300" />
     </div>
   );
 }

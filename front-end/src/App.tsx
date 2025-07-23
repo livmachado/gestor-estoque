@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="flex">
       <SideBar />
-      <main className="bg-blue-50 p-10 w-full">
+      <main className="bg-blue-50 p-5 px-10 w-full">
         <Routes>
           <Route path="/" element={<ProductsPage />} />
           <Route path="/transacoes" element={<DetailPage />} />
