@@ -3,7 +3,10 @@ type PrimaryButtonProps = {
   children: React.ReactNode;
 };
 
-export default function PrimaryButton({onClick, children} : PrimaryButtonProps){
+export default function PrimaryButton({
+  onClick,
+  children,
+}: PrimaryButtonProps) {
   return (
     <div>
       <button

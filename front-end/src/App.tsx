@@ -3,20 +3,21 @@ import { SideBar } from "./components/SideBar"
 
 //Pages
 import ProductsPage from "./pages/ProductsPage"
-//import TransactionsPage from "./pages/TransactionsPage"
 import DetailPage from "./pages/DetailPage"
-// import TransactionsPage from "./pages/TransactionsPage"
+import TransactionsPage from "./pages/TransactionsPage"
+import ReportPage from "./pages/reportPage"
 
 function App() {
 
   return (
     <div className="flex">
       <SideBar />
-      <main className="bg-blue-50 p-5 px-10 w-full">
+      <main className="bg-blue-50 p-2.5 px-10 w-full">
         <Routes>
           <Route path="/" element={<ProductsPage />} />
-          <Route path="/transacoes" element={<DetailPage />} />
-          {/* <Route path="/transacoes" element={<TransactionsPage />} /> */}
+          <Route path="/produtos/:id" element={<DetailPage />} />
+          <Route path="/transacoes" element={<TransactionsPage />} />
+          <Route path="/relatorio" element={<ReportPage />} />
         </Routes>
       </main>
     </div>

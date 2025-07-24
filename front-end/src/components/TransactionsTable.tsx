@@ -22,7 +22,7 @@ const columns = [
 
 export default function TransactionTable({ transactions }: Props) {
   return (
-    <table className="w-full bg-white rounded-md overflow-hidden">
+    <table className="w-7/8 bg-white rounded-md overflow-hidden">
       <thead className="border-b-3 border-r-2 border-blue-200 bg-blue-600 text-blue-300 ">
         <tr>
           {columns.map((col) => (
@@ -43,7 +43,10 @@ export default function TransactionTable({ transactions }: Props) {
           );
 
           return (
-            <tr key={transaction.id} className="border-b border-gray-200 odd:bg-white even:bg-blue-200">
+            <tr
+              key={transaction.id}
+              className="border-b border-gray-200 odd:bg-white even:bg-blue-200"
+            >
               <td
                 className={`p-3 text-sm font-medium ${color} flex items-center justify-center gap-1`}
               >
@@ -55,9 +58,7 @@ export default function TransactionTable({ transactions }: Props) {
               <td className={`p-3 text-sm font-medium ${color}`}>
                 {transaction.product}
               </td>
-              <td className="p-3 text-sm text-gray-400">
-                {transaction.date}
-              </td>
+              <td className="p-3 text-sm text-gray-400">{transaction.date}</td>
               <td className={`p-3 text-sm font-semibold ${color}`}>
                 {transaction.quantity}
               </td>

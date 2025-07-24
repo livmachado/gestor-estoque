@@ -38,16 +38,23 @@ export default function TransactionsPage() {
     useState<boolean>(false);
 
   return (
-    <div>
+    <div className="">
       <div className="flex justify-between gap-2.5">
-        <Breadcrumb value="Transações" />
+        <Breadcrumb
+          items={[
+            { label: "Transações", href: "/" },
+            ...(isModalTransactionOpen ? [{ label: "Nova Transação" }] : []),
+          ]}
+        />
         <PrimaryButton
           onClick={() => setIsModalTransactionOpen(!isModalTransactionOpen)}
           children="+ Nova Transação"
         />
-        <hr className="my-4 border-t border-gray-300" />
       </div>
-      <TransactionTable transactions={transactionsData} />
+      <hr className="my-4 border-t border-gray-300" />
+      <div className="flex justify-center">
+        <TransactionTable transactions={transactionsData} />
+      </div>
       <ModalTransaction
         isOpen={isModalTransactionOpen}
         onClose={() => setIsModalTransactionOpen(false)}

@@ -1,6 +1,12 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+//componentes
 import Breadcrumb from "../components/Breadcrumb";
 import PrimaryButton from "../components/PrimaryButton";
 import TransactionsTable from "../components/TransactionsTable";
+import Dropdown from "../components/Dropdown";
+import ModalTransaction from "../components/ModalTransaction";
 
 //icons
 import { FaArrowLeft } from "react-icons/fa";
@@ -52,64 +58,121 @@ const product = [
   },
 ];
 
-
 export default function DetailPage() {
+  const [openDropdownId, setOpenDropdownId] = useState<boolean>(false);
+  const [isModalTransactionOpen, setIsModalTransactionOpen] =
+    useState<boolean>(false);
+  const navigate = useNavigate();
+
   return (
-    <div className="items-center">
+    <div>
       <div className="flex justify-between gap-2.5">
-        <Breadcrumb value="Detalhe do Produto " />
-        <PrimaryButton onClick={()=> console.log("Hello")} children="+ Nova Transação" />
+        <Breadcrumb
+          items={[
+            { label: "Estoque", href: "/" },
+            { label: "Produto" },
+            ...(isModalTransactionOpen ? [{ label: "Nova Transação" }] : []),
+          ]}
+        />
+        <PrimaryButton
+          onClick={() => setIsModalTransactionOpen(!isModalTransactionOpen)}
+          children="+ Nova Transação"
+        />
       </div>
-      <hr className="my-4 border-t border-gray-300" />
-      <div className="ml-24 my-10 p-3 w-6xl bg-blue-100 rounded-md ">
-        <div className="flex justify-between p-0.5 items-center">
-          <FaArrowLeft size= {20} className="text-blue-500" />
-          <IoEllipsisVertical size={20} />
+      <hr className="mt-4 border-t border-gray-300" />
 
-        </div>
-        {product.map((prod) => (
-            <div className="w-full mx-10 mb-4 grid grid-cols-3 gap-3 text-sm text-blue-600 gap-y-2 ">
-                <div className="">
-                    <div className="grid grid-rows-2 gap-y-1 mb-2">
-                        <span className="font-medium">ID DO PRODUTO</span>
-                        <span className="font-semibold text-gray-600">{prod.id}</span>
-                    </div>
-                    <div className="grid grid-row-2 gap-y-1 mb-2">
-                        <span className="font-medium">QNT</span>
-                        <span className="font-semibold  text-gray-600">{prod.quantity} uni/kg</span>
-                        
+      {/* tabela */}
 
-                    </div>
-                </div>
-                <div className="">
-                    <div className="grid grid-row-2 gap-y-1 mb-2">
-                        <span className="font-medium">NOME</span>
-                        <span className="font-semibold  text-gray-600">{prod.name}</span>
-                    </div>
-                    <div className="grid grid-row-2 gap-y-1 mb-2">
-                        <span className="font-medium">PREÇO</span>
-                        <span className="font-semibold  text-gray-600">R${prod.price}</span>
+      <div className="flex justify-center mt-6 px-4">
+        <div className="w-5/6 bg-blue-100 rounded-xl p-6 space-y-8">
+          {/* Cabeçalho */}
+          <div className="flex justify-between items-center">
+            <FaArrowLeft
+              size={24}
+              className="cursor-pointer text-blue-700 hover:text-blue-900 transition"
+              onClick={() => navigate(-1)}
+            />
 
-                    </div>
+            <div className="relative">
+              <button
+                className="cursor-pointer text-blue-700 hover:text-blue-900 transition"
+                onClick={() => setOpenDropdownId(!openDropdownId)}
+              >
+                <IoEllipsisVertical size={24} />
+              </button>
+
+              {openDropdownId && (
+                <div className="absolute right-0 mt-2 z-20 bg-white border border-gray-200 rounded-md shadow-lg w-40">
+                  <Dropdown
+                    options={[
+                      { label: "Editar", onClick: () => console.log("Editar") },
+                      {
+                        label: "Excluir",
+                        onClick: () => console.log("Excluir"),
+                        colorRed: "y",
+                      },
+                    ]}
+                  />
                 </div>
-                <div>
-                    <div className="grid grid-row-2 gap-x-2">
-                        <span className="font-medium">DATA DE CRIAÇÃO</span>
-                        <span className="font-semibold  text-gray-600">{prod.date}</span>
-                    </div>
-                </div>
-                    <div className="grid grid-row-2 gap-x-2">
-                        <span className="font-medium">OBSERVAÇÕES</span>
-                        <span className="font-semibold  text-gray-600">{prod.detail}</span>
-                    </div>
+              )}
             </div>
+          </div>
 
+          {/* Informações do Produto */}
+          {product.map((prod) => (
+            <div
+              key={prod.id}
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm text-blue-800 ml-17"
+            >
+              <div>
+                <p className="font-semibold text-blue-700 text-xs mb-1">
+                  ID DO PRODUTO
+                </p>
+                <p className="text-gray-800">{prod.id}</p>
+              </div>
+
+              <div>
+                <p className="font-semibold text-blue-700 text-xs mb-1">NOME</p>
+                <p className="text-gray-800">{prod.name}</p>
+              </div>
+
+              <div>
+                <p className="font-semibold text-blue-700 text-xs mb-1">
+                  DATA DE CRIAÇÃO
+                </p>
+                <p className="text-gray-800">{prod.date}</p>
+              </div>
+
+              <div>
+                <p className="font-semibold text-blue-700 text-xs mb-1">QNT</p>
+                <p className="text-gray-800">{prod.quantity} uni/kg</p>
+              </div>
+
+              <div>
+                <p className="font-semibold text-blue-700 text-xs mb-1">
+                  PREÇO
+                </p>
+                <p className="text-gray-800">R${prod.price}</p>
+              </div>
+
+              <div className="sm:col-span-2 md:col-span-3">
+                <p className="font-semibold text-blue-700 text-xs mb-1">
+                  OBSERVAÇÕES
+                </p>
+                <p className="text-gray-800">{prod.detail}</p>
+              </div>
+            </div>
           ))}
-        <span className="w-full font-semibold text-md text-blue-600 ml-10 ">
-          TRANSAÇÕES DO PRODUTO
-        </span>
-        <div className="mx-10 my-6">
-          <TransactionsTable transactions={transactionData} />  
+
+          {/* Tabela */}
+          <div className="overflow-x-auto flex justify-center">
+            <TransactionsTable transactions={transactionData} />
+          </div>
+
+          <ModalTransaction
+            isOpen={isModalTransactionOpen}
+            onClose={() => setIsModalTransactionOpen(false)}
+          />
         </div>
       </div>
     </div>
