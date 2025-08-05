@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 //Componentes
 import PrimaryButton from "../components/PrimaryButton";
@@ -6,31 +6,41 @@ import Breadcrumb from "../components/Breadcrumb";
 import ProductsTable from "../components/ProductsTable";
 import ModalProduct from "../components/ModalProduct";
 import SearchInput from "../components/SearchInput";
+import PaginationTable from "../components/PaginationTable";
 
-const productData = [
-  {
-    id: 1,
-    name: "Mate Caseiro",
-    quantity: 10,
-    date: "20/01/2015",
-    price: "10.00",
-    action: "Ação",
-  },
-  {
-    id: 3,
-    name: "Água Mineral",
-    quantity: 10,
-    date: "20/01/2015",
-    price: "5.00",
-    action: "Ação",
-  },
-];
+type Product = {
+  id: number;
+  name: string;
+  description: string;
+  quantity: number;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export default function ProductsPage() {
   const [isModalProductOpen, setIsModalProductOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
-  const filteredProducts = productData.filter((product) => {
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/products");
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  //Fitro de produtos)
+  const filteredProducts = products.filter((product) => {
     const s = search
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
@@ -43,6 +53,18 @@ export default function ProductsPage() {
 
     return name.includes(s) || id.includes(s);
   });
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  //Calcula o total de pags
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   return (
     <div>
       <div className="flex justify-between gap-2.5">
@@ -61,11 +83,17 @@ export default function ProductsPage() {
       <hr className="my-4 border-t border-gray-300" />
       <SearchInput value={search} onChange={setSearch} />
       <div className="flex justify-center">
-        <ProductsTable products={filteredProducts} />
+        <ProductsTable products={paginatedProducts} />
       </div>
+      <PaginationTable
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
       <ModalProduct
         isOpen={isModalProductOpen}
         onClose={() => setIsModalProductOpen(false)}
+        onProductCreated={fetchProducts}
       />
     </div>
   );

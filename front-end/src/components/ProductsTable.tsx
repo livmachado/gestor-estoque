@@ -6,9 +6,11 @@ import Dropdown from "./Dropdown";
 type Product = {
   id: number;
   name: string;
+  description: string;
   quantity: number;
-  price: string;
-  date: string;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 type Props = {
@@ -56,16 +58,16 @@ export default function ProductsTable({ products }: Props) {
             <td className="p-3 text-center text-sm text-gray-500 font-normal hover:underline">
               {product.id}
             </td>
-            <td className="p-3 text-center text-sm text-gray-900 font-medium hover:underline">
+            <td className="p-3 text-start text-sm text-gray-900 font-medium hover:underline">
               {product.name}
             </td>
             <td className="p-3 text-center text-sm text-gray-500 font-normal">
               {product.quantity}
             </td>
             <td className="p-3 text-center text-sm text-gray-500 font-normal">
-              {product.date}
+              {product.createdAt}
             </td>
-            <td className="p-3 text-center text-sm text-gray-500 font-normal">
+            <td className="p-3 text-start text-sm text-gray-500 font-normal">
               R${product.price}
             </td>
             <button
