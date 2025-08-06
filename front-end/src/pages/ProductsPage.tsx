@@ -7,12 +7,14 @@ import ProductsTable from "../components/ProductsTable";
 import ModalProduct from "../components/ModalProduct";
 import SearchInput from "../components/SearchInput";
 import PaginationTable from "../components/PaginationTable";
+import { toast } from "react-toastify";
 
 type Product = {
   id: number;
   name: string;
   description: string;
   quantity: number;
+  unitType: string;
   price: number;
   createdAt: string;
   updatedAt: string;
@@ -32,6 +34,7 @@ export default function ProductsPage() {
       setProducts(data);
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
+      toast.error("Não foi possível encontrar produtos cadastrados.");
     }
   };
 
@@ -83,7 +86,7 @@ export default function ProductsPage() {
       <hr className="my-4 border-t border-gray-300" />
       <SearchInput value={search} onChange={setSearch} />
       <div className="flex justify-center">
-        <ProductsTable products={paginatedProducts} />
+        <ProductsTable products={paginatedProducts} setProducts={setProducts} />
       </div>
       <PaginationTable
         currentPage={currentPage}

@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoEllipsisVertical } from "react-icons/io5";
 import Dropdown from "./Dropdown";
+import { toast } from "react-toastify";
 
 type Product = {
   id: number;
   name: string;
   description: string;
+  unitType: string;
   quantity: number;
   price: number;
   createdAt: string;
@@ -15,6 +17,7 @@ type Product = {
 
 type Props = {
   products: Product[];
+  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 };
 const columns = [
   { header: "ID", accessor: "id" },
@@ -25,7 +28,15 @@ const columns = [
   { header: "", accessor: "action" },
 ];
 
-export default function ProductsTable({ products }: Props) {
+const unitLabels: Record<string, string> = {
+  UNI: "UN",
+  KG: "KG",
+  L: "L",
+  CX: "CX",
+  PCT: "PCT",
+};
+
+export default function ProductsTable({ products, setProducts }: Props) {
   const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
   const navigate = useNavigate();
 
@@ -35,6 +46,30 @@ export default function ProductsTable({ products }: Props) {
 
   const handleRowClick = (id: number) => {
     navigate(`/produtos/${id}`);
+  };
+
+  const handleDelete = async (id: number) => {
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja excluir este produto?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`http://localhost:3000/products/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("Erro ao excluir produto.");
+      }
+
+      // Remove o produto do estado local
+      setProducts((prev) => prev.filter((product) => product.id !== id));
+      toast.success("Seu item foi excluído com sucesso!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Não foi possível excluir o produto.");
+    }
   };
 
   return (
@@ -62,13 +97,23 @@ export default function ProductsTable({ products }: Props) {
               {product.name}
             </td>
             <td className="p-3 text-center text-sm text-gray-500 font-normal">
-              {product.quantity}
+              {product.quantity}{" "}
+              {unitLabels[product.unitType] || product.unitType}
             </td>
             <td className="p-3 text-center text-sm text-gray-500 font-normal">
-              {product.createdAt}
+              {new Date(product.createdAt).toLocaleString("pt-BR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </td>
             <td className="p-3 text-start text-sm text-gray-500 font-normal">
-              R${product.price}
+              {product.price.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
             </td>
             <button
               className="flex cursor-pointer p-3 items-center text-center hover:bg-gray-100 rounded"
@@ -90,7 +135,10 @@ export default function ProductsTable({ products }: Props) {
                     { label: "Editar", onClick: () => console.log("Editar") },
                     {
                       label: "Excluir",
-                      onClick: () => console.log("Excluir"),
+                      onClick: (e) => {
+                        e?.stopPropagation();
+                        handleDelete(product.id);
+                      },
                       colorRed: "y",
                     },
                   ]}

@@ -1,14 +1,15 @@
-import { Route, Routes } from "react-router-dom"
-import { SideBar } from "./components/SideBar"
+import { Route, Routes } from "react-router-dom";
+import { SideBar } from "./components/SideBar";
+import { Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //Pages
-import ProductsPage from "./pages/ProductsPage"
-import DetailPage from "./pages/DetailPage"
-import TransactionsPage from "./pages/TransactionsPage"
-import ReportPage from "./pages/reportPage"
+import ProductsPage from "./pages/ProductsPage";
+import DetailPage from "./pages/DetailPage";
+import TransactionsPage from "./pages/TransactionsPage";
+import ReportPage from "./pages/ReportPage";
 
 function App() {
-
   return (
     <div className="flex">
       <SideBar />
@@ -20,8 +21,21 @@ function App() {
           <Route path="/relatorio" element={<ReportPage />} />
         </Routes>
       </main>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

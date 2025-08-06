@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { GoX } from "react-icons/go";
+import { toast } from "react-toastify";
 
 interface modalType {
   isOpen: boolean;
@@ -7,11 +8,33 @@ interface modalType {
   onProductCreated: () => void;
 }
 
-export default function ModalProduct({ isOpen, onClose, onProductCreated }: modalType) {
+export default function ModalProduct({
+  isOpen,
+  onClose,
+  onProductCreated,
+}: modalType) {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [unitType, setUnitType] = useState("uni");
+
+const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Remove tudo que não for número
+  const value = e.target.value.replace(/\D/g, "");
+
+  // Converte para número com casas decimais
+  const numberValue = Number(value) / 100;
+
+  // Formata como moeda BRL
+  const formatted = new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 2,
+  }).format(numberValue);
+
+  setPrice(formatted);
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,8 +46,9 @@ export default function ModalProduct({ isOpen, onClose, onProductCreated }: moda
         body: JSON.stringify({
           name,
           quantity: Number(quantity),
-          price: Number(price),
+          price: Number(price.replace(/\s|[R$]/g, "").replace(",", ".")),
           description,
+          unitType,
         }),
       });
 
@@ -39,14 +63,16 @@ export default function ModalProduct({ isOpen, onClose, onProductCreated }: moda
       setQuantity("");
       setPrice("");
       setDescription("");
+      setUnitType("uni")
 
       onProductCreated();
 
       onClose();
+      toast.success("Seu item foi Criado com sucesso!");
     } catch (error) {
       // Caso aconteça qualquer erro na requisição ou no servidor, cai aqui
       console.error("Erro ao enviar:", error);
-      alert("Não foi possível cadastrar o produto. Tente novamente.");
+      toast.error("Não foi possível cadastrar o produto. Tente novamente.");
     }
   };
 
@@ -66,10 +92,11 @@ export default function ModalProduct({ isOpen, onClose, onProductCreated }: moda
           Nome do produto
         </label>
         <input
-          className="w-full border border-blue-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-100"
+          className="w-full  border border-blue-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-100"
           type="text"
           placeholder="Nome do produto"
           value={name}
+          maxLength={50}
           onChange={(e) => setName(e.target.value)}
           required
         />
@@ -85,21 +112,33 @@ export default function ModalProduct({ isOpen, onClose, onProductCreated }: moda
               onChange={(e) => setQuantity(e.target.value)}
               required
               className="w-full border border-blue-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-100"
-              />
+            />
+          </div>
+          <div className="w-1/2">
+            <label className="block font-medium mb-1 text-blue-600">Tipo</label>
+            <select
+              className="w-full border border-blue-400 rounded-md px-3 py-2 bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
+              value={unitType}
+              onChange={(e) => setUnitType(e.target.value)}
+            >
+              <option value="UNI">UN</option>
+              <option value="KG">KG</option>
+              <option value="L">L</option>
+              <option value="CX">CX</option>
+              <option value="PCT">PCT</option>
+            </select>
           </div>
           <div className="w-1/2">
             <label className="block font-medium mb-1 text-blue-600" htmlFor="">
               Preço
             </label>
             <input
-              type="number"
-              placeholder="preço"
+              type="text"
+              placeholder="Preço"
               value={price}
-              step="0.01"
-              onChange={(e) => setPrice(e.target.value)}
-              required
+              onChange={handlePriceChange}
               className="w-full border border-blue-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-100"
-              />
+            />
           </div>
         </div>
         <label className="block font-medium mb-1 text-blue-600" htmlFor="">
@@ -110,9 +149,9 @@ export default function ModalProduct({ isOpen, onClose, onProductCreated }: moda
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
-          maxLength={50}
-          className="w-full border border-blue-400 rounded-md px-3 py-2 h-20 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-100"
-          />
+          maxLength={200}
+          className="w-full resize-none border h-24 border-blue-400 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-blue-100 custom-scroll"
+        />
         <div className="flex justify-end">
           <button
             type="submit"

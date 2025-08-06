@@ -1,7 +1,7 @@
 type DropdownProps = {
   options: {
     label: string;
-    onClick?: () => void;
+    onClick?: (e?: React.MouseEvent) => void;
     colorRed?: "y" | "n";
   }[];
 };
@@ -15,8 +15,9 @@ export default function Dropdown({ options }: DropdownProps) {
           className={`w-full text-left px-4 py-2 text-sm hover:bg-blue-50 ${
             option.colorRed === "y" ? "text-red-600" : "text-gray-700"
           }`}
-          onClick={option.onClick}
-        >
+          onClick={(e) => option.onClick && option.onClick(e)}
+          >
+        
           {option.label}
         </button>
       ))}
