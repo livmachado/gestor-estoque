@@ -17,7 +17,7 @@ export default function ModalProduct({
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [unitType, setUnitType] = useState("uni");
+  const [unitType, setUnitType] = useState("UNI");
 
 const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   // Remove tudo que não for número
@@ -134,6 +134,7 @@ const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             </label>
             <input
               type="text"
+              required
               placeholder="Preço"
               value={price}
               onChange={handlePriceChange}

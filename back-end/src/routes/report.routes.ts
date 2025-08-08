@@ -3,6 +3,6 @@ import { ReportController } from "../controllers/report.controller";
 
 const router= Router();
 
-router.get("/low-stock", ReportController.lowStock)
+router.get("/", ReportController.lowStock)
 
 export default router;

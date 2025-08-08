@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 //componentes
 import Breadcrumb from "../components/Breadcrumb";
@@ -11,58 +11,78 @@ import ModalTransaction from "../components/ModalTransaction";
 //icons
 import { FaArrowLeft } from "react-icons/fa";
 import { IoEllipsisVertical } from "react-icons/io5";
+import { toast } from "react-toastify";
+import PaginationTable from "../components/PaginationTable";
 
-const transactionData = [
-  {
-    id: 1,
-    product: "Mate Caseiro",
-    productId: 1,
-    type: "in",
-    quantity: 2,
-    date: "07/07/24 08:06:52",
-  },
-  {
-    id: 1,
-    product: "Mate Caseiro",
-    productId: 1,
-    type: "in",
-    quantity: 2,
-    date: "07/07/24 08:06:52",
-  },
-  {
-    id: 1,
-    product: "Mate Caseiro",
-    productId: 1,
-    type: "in",
-    quantity: 2,
-    date: "07/07/24 08:06:52",
-  },
-  {
-    id: 1,
-    product: "Mate Caseiro",
-    productId: 1,
-    type: "in",
-    quantity: 2,
-    date: "07/07/24 08:06:52",
-  },
-];
-
-const product = [
-  {
-    id: 1,
-    name: "Mate Caseiro",
-    quantity: 10,
-    date: "20/01/2015",
-    price: "10.00",
-    detail: "Mate da casa preparado com limão",
-  },
-];
+type Product = {
+  id: number;
+  name: string;
+  description: string;
+  quantity: number;
+  unitType: string;
+  price: number;
+  createdAt: string;
+  updatedAt: string;
+};
+type Transaction = {
+  id: number;
+  product: Product;
+  productId: number;
+  type: "IN" | "OUT";
+  quantity: number;
+  note: string;
+  createdAt: string;
+};
 
 export default function DetailPage() {
+  const { id } = useParams();
   const [openDropdownId, setOpenDropdownId] = useState<boolean>(false);
   const [isModalTransactionOpen, setIsModalTransactionOpen] =
     useState<boolean>(false);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
+
   const navigate = useNavigate();
+
+  const fetchProduct = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/products/${id}`);
+      const data = await res.json();
+      setProduct(data);
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+      toast.error("Não foi possível encontrar produtos cadastrados.");
+    }
+  };
+
+  useEffect(() => {
+    fetchProduct();
+  });
+  useEffect(() => {
+    fetchTransactionsProduct();
+  });
+
+  const fetchTransactionsProduct = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/transactions/${id}`);
+      const data = await res.json();
+      setTransactions(data);
+    } catch (error) {
+      console.error("Erro ao buscar transações:", error);
+      toast.error("Não foi possível encontrar transações.");
+    }
+  };
+
+  //Calcula o total de pags
+  const totalPages = Math.ceil(transactions.length / itemsPerPage);
+  const paginatedTransactions = transactions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  if (!product) return <p>Produto não encontrado</p>;
 
   return (
     <div>
@@ -119,59 +139,81 @@ export default function DetailPage() {
           </div>
 
           {/* Informações do Produto */}
-          {product.map((prod) => (
+          {product && (
             <div
-              key={prod.id}
+              key={product.id}
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-sm text-blue-800 ml-17"
             >
               <div>
                 <p className="font-semibold text-blue-700 text-xs mb-1">
                   ID DO PRODUTO
                 </p>
-                <p className="text-gray-800">{prod.id}</p>
+                <p className="text-gray-800">{product.id}</p>
               </div>
 
               <div>
                 <p className="font-semibold text-blue-700 text-xs mb-1">NOME</p>
-                <p className="text-gray-800">{prod.name}</p>
+                <p className="text-gray-800">{product.name}</p>
               </div>
 
               <div>
                 <p className="font-semibold text-blue-700 text-xs mb-1">
                   DATA DE CRIAÇÃO
                 </p>
-                <p className="text-gray-800">{prod.date}</p>
+                <p className="text-gray-800">
+                  {new Date(product.createdAt).toLocaleString("pt-BR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
               </div>
 
               <div>
                 <p className="font-semibold text-blue-700 text-xs mb-1">QNT</p>
-                <p className="text-gray-800">{prod.quantity} uni/kg</p>
+                <p className="text-gray-800">
+                  {product.quantity} {product.unitType}
+                </p>
               </div>
 
               <div>
                 <p className="font-semibold text-blue-700 text-xs mb-1">
                   PREÇO
                 </p>
-                <p className="text-gray-800">R${prod.price}</p>
+                <p className="text-gray-800">
+                  {product.price.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </p>
               </div>
 
               <div className="sm:col-span-2 md:col-span-3">
                 <p className="font-semibold text-blue-700 text-xs mb-1">
                   OBSERVAÇÕES
                 </p>
-                <p className="text-gray-800">{prod.detail}</p>
+                <p className="text-gray-800">{product.description}</p>
               </div>
             </div>
-          ))}
+          )}
 
           {/* Tabela */}
           <div className="overflow-x-auto flex justify-center">
-            <TransactionsTable transactions={transactionData} />
+            <TransactionsTable transactions={paginatedTransactions} />
           </div>
+          <PaginationTable
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
 
           <ModalTransaction
             isOpen={isModalTransactionOpen}
             onClose={() => setIsModalTransactionOpen(false)}
+            onTransactionCreated={fetchTransactionsProduct}
+            defaultProductId={product.id}
           />
         </div>
       </div>

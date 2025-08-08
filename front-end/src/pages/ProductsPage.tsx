@@ -42,7 +42,7 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  //Fitro de produtos)
+  //Fitro de produtos
   const filteredProducts = products.filter((product) => {
     const s = search
       .normalize("NFD")

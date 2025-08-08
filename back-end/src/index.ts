@@ -12,7 +12,7 @@ app.use(express.json());
 
 const PORT = 3000;
 app.use('/products', productRoutes);
-app.use('/transaction', transactionRoutes);
+app.use('/transactions', transactionRoutes);
 app.use('/report', reportRoutes);
 
 
