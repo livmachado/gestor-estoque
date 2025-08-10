@@ -59,10 +59,8 @@ export default function DetailPage() {
 
   useEffect(() => {
     fetchProduct();
-  });
-  useEffect(() => {
     fetchTransactionsProduct();
-  });
+  }, []);
 
   const fetchTransactionsProduct = async () => {
     try {
